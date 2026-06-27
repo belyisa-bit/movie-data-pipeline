@@ -1,17 +1,17 @@
 # src/main.py
 import logging
 import os
-from src.config import Config  # Importando a classe limpa e validada
+from src.config import Config
 from src.extract import extract_movies
 from src.transform import transform_movies
+from src.load import load_movies  # 🚀 NOVO: Importa a camada de carga
 
-# Configuração do Logging
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
+
 def run_pipeline() -> None:
-    """Executa o fluxo principal do pipeline ETL até a exportação dos dados."""
     logging.info("==============================================")
     logging.info("🎬 INICIANDO O MOVIE DATA PIPELINE (ETL)")
     logging.info("==============================================")
@@ -23,21 +23,23 @@ def run_pipeline() -> None:
         # 2. ETAPA: TRANSFORM
         df_processed = transform_movies(df_raw)
 
-        # 3. ETAPA: EXPORT
+        # 3. ETAPA: EXPORT (CSV intermediário)
         output_path = Config.PROCESSED_DATA_PATH
-        logging.info(f"Exportando dados processados para: {output_path}")
-
-        # Garante que a pasta 'data/processed' existe
+        logging.info(f"Exportando dados intermediários para: {output_path}")
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
-
-        # Salva o DataFrame tratado em um arquivo CSV
         df_processed.to_csv(output_path, index=False)
-        logging.info(
-            f"🚀 Sucesso! Arquivo gerado com {df_processed.shape[0]} linhas."
-        )
+
+        # 4. ETAPA: LOAD 🚀 (NOVO)
+        # O pipeline agora envia os dados direto para o PostgreSQL local
+        load_movies(df_processed, table_name="tb_movies_processed")
+
+        logging.info("==============================================")
+        logging.info("🏆 PIPELINE EXECUTADO DE PONTA A PONTA COM SUCESSO!")
+        logging.info("==============================================")
 
     except Exception as error:
         logging.critical(f"💥 O pipeline falhou: {error}")
+
 
 if __name__ == "__main__":
     run_pipeline()

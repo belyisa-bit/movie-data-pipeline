@@ -1,0 +1,4 @@
+id,title,genres,release_year,release_date,budget,revenue,vote_average,vote_count,popularity,original_language,profit,roi,release_decade,revenue_category,rating_category
+1,Toy Story,Animation,1995,1995-01-01,50000000.0,150000000.0,7.5,1000,100.0,en,100000000.0,2.0,1990s,Médio Faturamento,Bom/Regular
+2,Jumanji,Adventure,1995,1995-01-01,50000000.0,150000000.0,7.5,1000,100.0,en,100000000.0,2.0,1990s,Médio Faturamento,Bom/Regular
+3,Matrix,Sci-Fi,1999,1995-01-01,50000000.0,150000000.0,7.5,1000,100.0,en,100000000.0,2.0,1990s,Médio Faturamento,Bom/Regular
